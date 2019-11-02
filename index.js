@@ -1,5 +1,10 @@
 ;(function draw() {
   const canvas = document.querySelector('canvas')
+  const A = { x: 0, y: side }
+  const B = { x: side / 2, y: 0 }
+  const C = { x: side, y: side }
+  const basePoints = []
+
   canvas.width = canvasWidth = window.innerWidth - 100
   canvas.height = canvasHeight = window.innerHeight - 100
   const ctx = canvas.getContext('2d')
@@ -23,11 +28,6 @@
 
   const side = Math.min(canvasWidth, canvasHeight)
 
-  const A = { x: 0, y: side }
-  const B = { x: side / 2, y: 0 }
-  const C = { x: side, y: side }
-  const basePoints = [A, B, C]
-
   function pointBetween(a, b) {
     return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
   }
@@ -43,7 +43,9 @@
   let currentI = 0
   let inThisLoop = 0
   let currPoint = generateRandomPoint()
+  let timeout
   function doTriangle(end) {
+    if (basePoints.length < 3) return
     currPoint = pointBetween(currPoint, takeRandomBasePoint())
     render(currPoint)
 
@@ -52,11 +54,18 @@
         doTriangle(end)
       } else {
         inThisLoop = 0
-        window.setTimeout(() => doTriangle(end), 0)
+        timeout = window.setTimeout(() => doTriangle(end), 0)
       }
     }
   }
-
-  doTriangle(Infinity)
+  canvas.addEventListener('click', e => {
+    const basePoint = { x: e.clientX, y: e.clientY }
+    basePoints.push(basePoint)
+    restart()
+  })
+  function restart() {
+    window.clearTimeout(timeout)
+    doTriangle(30000)
+  }
   console.log('end')
 })()
