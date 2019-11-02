@@ -3,7 +3,10 @@ function getRandomInt(min, max) {
 }
 
 function drawPixel(ctx, x, y) {
-  ctx.fillStyle = '#fff'
+  const r = getRandomInt(100, 255)
+  const g = getRandomInt(100, 255)
+  const b = getRandomInt(100, 255)
+  ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 1)`
   ctx.beginPath()
   ctx.arc(x, y, 1, 0, Math.PI * 2, true)
   ctx.fill()
