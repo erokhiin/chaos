@@ -117,110 +117,74 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"index.js":[function(require,module,exports) {
-function renderUi(_ref) {
-  var points = _ref.points,
-      removePoint = _ref.removePoint;
-  var uiEl = document.querySelector('.ui');
-  uiEl.innerHTML = '';
-  points.forEach(function (point, i) {
-    var pointEl = document.createElement('div');
-    pointEl.className = 'point';
-    pointEl.innerHTML = "\n      <div>x: ".concat(point.x.toFixed(2), "</div>\n      <div>y: ").concat(point.y.toFixed(2), "</div>\n    ");
-    pointEl.addEventListener('click', function () {
-      removePoint(i, point);
-    });
-    uiEl.appendChild(pointEl);
-  });
-}
+})({"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-function getRandomInt(min, max) {
-  return Math.round(Math.random() * (max - min)) + min;
-}
-
-function drawPixel(x, y) {
-  ctx.fillStyle = '#fff';
-  ctx.beginPath();
-  ctx.arc(x, y, 1, 0, Math.PI * 2, true);
-  ctx.fill();
-}
-
-;
-
-(function draw() {
-  var canvas = document.querySelector('canvas');
-  canvas.width = canvasWidth = window.innerWidth - 100;
-  canvas.height = canvasHeight = window.innerHeight - 100;
-  var ctx = canvas.getContext('2d');
-
-  function render(point) {
-    ctx.fillRect(point.x, point.y, 1, 1);
-    drawPixel(point.x, point.y, 255, 0, 0, 255);
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
   }
 
-  var side = Math.min(canvasWidth, canvasHeight);
-  var A = {
-    x: 0,
-    y: side
-  };
-  var B = {
-    x: side / 2,
-    y: 0
-  };
-  var C = {
-    x: side,
-    y: side
-  };
-  var basePoints = [A, B, C];
-  renderUi({
-    points: basePoints,
-    removePoint: function removePoint(i, point) {
-      basePoints.splice(i, 1);
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
     }
-  });
-
-  function pointBetween(a, b) {
-    return {
-      x: (a.x + b.x) / 2,
-      y: (a.y + b.y) / 2
-    };
   }
 
-  function takeRandomBasePoint() {
-    return basePoints[getRandomInt(0, basePoints.length - 1)];
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
   }
 
-  function generateRandomPoint() {
-    return {
-      x: getRandomInt(0, 100),
-      y: getRandomInt(0, 100)
-    };
-  }
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
 
-  var currentI = 0;
-  var inThisLoop = 0;
-  var currPoint = generateRandomPoint();
-
-  function doTriangle(end) {
-    currPoint = pointBetween(currPoint, takeRandomBasePoint());
-    render(currPoint);
-
-    if (++currentI < end) {
-      if (++inThisLoop < 5000) {
-        doTriangle(end);
-      } else {
-        inThisLoop = 0;
-        window.setTimeout(function () {
-          return doTriangle(end);
-        }, 0);
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
       }
     }
-  }
 
-  doTriangle(Infinity);
-  console.log('end');
-})();
-},{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -424,5 +388,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
-//# sourceMappingURL=/chaos.e31bb0bc.js.map
+},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/index.js.map
