@@ -19,7 +19,7 @@ function getRandomInt(min, max) {
   return Math.round(Math.random() * (max - min)) + min
 }
 
-function drawPixel(x, y) {
+function drawPixel(ctx, x, y) {
   ctx.fillStyle = '#fff'
   ctx.beginPath()
   ctx.arc(x, y, 1, 0, Math.PI * 2, true)
@@ -39,7 +39,7 @@ function drawPixel(x, y) {
 
   function render(point) {
     ctx.fillRect(point.x, point.y, 1, 1)
-    drawPixel(point.x, point.y, 255, 0, 0, 255)
+    drawPixel(ctx, point.x, point.y, 255, 0, 0, 255)
   }
 
   const side = Math.min(canvasWidth, canvasHeight)
@@ -53,7 +53,7 @@ function drawPixel(x, y) {
     points: basePoints,
     removePoint: (i, point) => {
       basePoints.splice(i, 1)
-    }
+    },
   })
 
   function pointBetween(a, b) {
