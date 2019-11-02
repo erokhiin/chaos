@@ -28,9 +28,6 @@ function drawPixel(ctx, x, y) {
 
 ;(function draw() {
   const canvas = document.querySelector('canvas')
-  const A = { x: 0, y: side }
-  const B = { x: side / 2, y: 0 }
-  const C = { x: side, y: side }
   const basePoints = []
 
   canvas.width = canvasWidth = window.innerWidth - 100
@@ -43,11 +40,6 @@ function drawPixel(ctx, x, y) {
   }
 
   const side = Math.min(canvasWidth, canvasHeight)
-
-  const A = { x: 0, y: side }
-  const B = { x: side / 2, y: 0 }
-  const C = { x: side, y: side }
-  const basePoints = [A, B, C]
 
   renderUi({
     points: basePoints,
