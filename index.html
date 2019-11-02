@@ -23,12 +23,21 @@
         align-items: center;
       }
 
-      .ui {
+      .fixed {
         padding: 20px;
         position: fixed;
         color: #fff;
         right: 0;
         top: 0;
+
+        height: 100%;
+        box-sizing: border-box;
+      }
+
+      .speed {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
       }
 
       .point {
@@ -48,7 +57,14 @@
   </head>
   <body id="app">
     <canvas></canvas>
-    <div class="ui"></div>
+
+    <div class="fixed">
+      <div class="ui"></div>
+      
+      <div class="speed">
+        <input type="range" min="10" max="5000" value="50"> 
+      </div>
+    </div>
     <script src="./index.js"></script>
   </body>
 </html>
