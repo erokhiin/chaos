@@ -10,9 +10,21 @@ function drawPixel(ctx, x, y) {
 }
 
 ;(function draw() {
+  let isSliderInited = false
+  let speed = 10
   const basePoints = []
 
   function renderUi() {
+    if (!isSliderInited) {
+      let slider = document.querySelector('.speed input')
+
+      slider.addEventListener('change', (e) => {
+        speed = Number(e.target.value)
+      })
+
+      isSliderInited = true
+    }
+  
     const uiEl = document.querySelector('.ui')
     uiEl.innerHTML = ''
     basePoints.forEach((point, i) => {
@@ -53,7 +65,7 @@ function drawPixel(ctx, x, y) {
   let currentI = 0
   let inThisLoop = 0
   let currPoint = generateRandomPoint()
-  let timeout
+  let id
 
   function doTriangle(end) {
     if (basePoints.length < 3) return
@@ -61,11 +73,11 @@ function drawPixel(ctx, x, y) {
     render(currPoint)
 
     if (++currentI < end) {
-      if (++inThisLoop < 5000) {
+      if (++inThisLoop < speed) {
         doTriangle(end)
       } else {
         inThisLoop = 0
-        timeout = window.setTimeout(() => doTriangle(end), 0)
+        id = window.requestAnimationFrame(() => doTriangle(end))
       }
     }
   }
@@ -84,12 +96,12 @@ function drawPixel(ctx, x, y) {
   }
 
   function stopWorking() {
-    window.clearTimeout(timeout)
+    window.cancelAnimationFrame(id)
     ctx.clearRect(0, 0, canvas.width, canvas.height)
   }
 
   function startWorking() {
-    doTriangle(Infinity)
+    id = window.requestAnimationFrame(() => doTriangle(Infinity))
     renderUi()
   }
 
