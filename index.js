@@ -1,20 +1,3 @@
-function renderUi({ points, removePoint }) {
-  const uiEl = document.querySelector('.ui')
-  uiEl.innerHTML = ''
-  points.forEach((point, i) => {
-    const pointEl = document.createElement('div')
-    pointEl.className = 'point'
-    pointEl.innerHTML = `
-      <div>x: ${point.x.toFixed(2)}</div>
-      <div>y: ${point.y.toFixed(2)}</div>
-    `
-    pointEl.addEventListener('click', () => {
-      removePoint(i, point)
-    })
-    uiEl.appendChild(pointEl)
-  })
-}
-
 function getRandomInt(min, max) {
   return Math.round(Math.random() * (max - min)) + min
 }
@@ -27,26 +10,32 @@ function drawPixel(ctx, x, y) {
 }
 
 ;(function draw() {
-  const canvas = document.querySelector('canvas')
   const basePoints = []
 
-  canvas.width = canvasWidth = window.innerWidth - 100
-  canvas.height = canvasHeight = window.innerHeight - 100
+  function renderUi() {
+    const uiEl = document.querySelector('.ui')
+    uiEl.innerHTML = ''
+    basePoints.forEach((point, i) => {
+      const pointEl = document.createElement('div')
+      pointEl.className = 'point'
+      pointEl.innerHTML = `
+        <div>x: ${point.x.toFixed(2)}</div>
+        <div>y: ${point.y.toFixed(2)}</div>
+      `
+      pointEl.addEventListener('click', () => removePoint(i, point))
+      uiEl.appendChild(pointEl)
+    })
+  }
+
+  const canvas = document.querySelector('canvas')
+  canvas.width = canvasWidth = window.innerWidth
+  canvas.height = canvasHeight = window.innerHeight
   const ctx = canvas.getContext('2d')
 
   function render(point) {
     ctx.fillRect(point.x, point.y, 1, 1)
     drawPixel(ctx, point.x, point.y, 255, 0, 0, 255)
   }
-
-  const side = Math.min(canvasWidth, canvasHeight)
-
-  renderUi({
-    points: basePoints,
-    removePoint: (i, point) => {
-      basePoints.splice(i, 1)
-    },
-  })
 
   function pointBetween(a, b) {
     return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
@@ -64,6 +53,7 @@ function drawPixel(ctx, x, y) {
   let inThisLoop = 0
   let currPoint = generateRandomPoint()
   let timeout
+
   function doTriangle(end) {
     if (basePoints.length < 3) return
     currPoint = pointBetween(currPoint, takeRandomBasePoint())
@@ -78,14 +68,30 @@ function drawPixel(ctx, x, y) {
       }
     }
   }
+
   canvas.addEventListener('click', e => {
+    stopWorking()
     const basePoint = { x: e.clientX, y: e.clientY }
     basePoints.push(basePoint)
-    restart()
+    startWorking()
   })
-  function restart() {
-    window.clearTimeout(timeout)
-    doTriangle(30000)
+
+  function removePoint(i) {
+    stopWorking()
+    basePoints.splice(i, 1)
+    startWorking()
   }
+
+  function stopWorking() {
+    window.clearTimeout(timeout)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  }
+
+  function startWorking() {
+    doTriangle(Infinity)
+    renderUi()
+  }
+
   console.log('end')
+  renderUi(app)
 })()
