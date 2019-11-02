@@ -28,8 +28,9 @@ function drawPixel(ctx, x, y) {
   }
 
   const canvas = document.querySelector('canvas')
-  canvas.width = canvasWidth = window.innerWidth
-  canvas.height = canvasHeight = window.innerHeight
+  const dpi = window.devicePixelRatio || 1
+  canvas.width = canvasWidth = window.innerWidth * dpi
+  canvas.height = canvasHeight = window.innerHeight * dpi
   const ctx = canvas.getContext('2d')
 
   function render(point) {
@@ -71,7 +72,7 @@ function drawPixel(ctx, x, y) {
 
   canvas.addEventListener('click', e => {
     stopWorking()
-    const basePoint = { x: e.clientX, y: e.clientY }
+    const basePoint = { x: e.clientX * dpi, y: e.clientY * dpi }
     basePoints.push(basePoint)
     startWorking()
   })
