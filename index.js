@@ -1,5 +1,7 @@
 function getRandomInt(min, max) {
-  return Math.round(Math.random() * (max - min)) + min
+  // получить случайное число от (min-0.5) до (max+0.5)
+  let rand = min - 0.5 + Math.random() * (max - min + 1);
+  return Math.round(rand);
 }
 
 function drawPixel(ctx, x, y, i) {
