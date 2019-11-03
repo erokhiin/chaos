@@ -2,11 +2,8 @@ function getRandomInt(min, max) {
   return Math.round(Math.random() * (max - min)) + min
 }
 
-function drawPixel(ctx, x, y) {
-  const r = getRandomInt(100, 255)
-  const g = getRandomInt(100, 255)
-  const b = getRandomInt(100, 255)
-  ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 1)`
+function drawPixel(ctx, x, y, i) {
+  ctx.fillStyle = `hsl(${(i % 310) + 1}, 70%, 60%)`
   ctx.beginPath()
   ctx.arc(x, y, 1, 0, Math.PI * 2, true)
   ctx.fill()
@@ -21,13 +18,13 @@ function drawPixel(ctx, x, y) {
     if (!isSliderInited) {
       let slider = document.querySelector('.speed input')
 
-      slider.addEventListener('change', (e) => {
+      slider.addEventListener('change', e => {
         speed = Number(e.target.value)
       })
 
       isSliderInited = true
     }
-  
+
     const uiEl = document.querySelector('.ui')
     uiEl.innerHTML = ''
     basePoints.forEach((point, i) => {
@@ -50,7 +47,7 @@ function drawPixel(ctx, x, y) {
 
   function render(point) {
     ctx.fillRect(point.x, point.y, 1, 1)
-    drawPixel(ctx, point.x, point.y, 255, 0, 0, 255)
+    drawPixel(ctx, point.x, point.y, currentI)
   }
 
   function pointBetween(a, b) {
