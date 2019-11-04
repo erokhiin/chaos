@@ -40,6 +40,11 @@
         right: 20px;
       }
 
+      .coefficient {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+      }
       .point {
         margin-bottom: 10px;
         background-color: rgba(0, 0, 0, 0.25);
@@ -60,10 +65,13 @@
 
     <div class="fixed">
       <div class="ui"></div>
-      
+
       <div class="speed">
-        <input type="range" min="10" max="5000" value="50"> 
+        <input type="range" min="10" max="5000" value="50" />
       </div>
+    </div>
+    <div class="coefficient">
+      <input type="number" min="1" max="5000" value="1" />
     </div>
     <script src="./index.js"></script>
   </body>

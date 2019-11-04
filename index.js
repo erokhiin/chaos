@@ -1,7 +1,7 @@
 function getRandomInt(min, max) {
   // получить случайное число от (min-0.5) до (max+0.5)
-  let rand = min - 0.5 + Math.random() * (max - min + 1);
-  return Math.round(rand);
+  let rand = min - 0.5 + Math.random() * (max - min + 1)
+  return Math.round(rand)
 }
 
 function drawPixel(ctx, x, y, i) {
@@ -14,6 +14,7 @@ function drawPixel(ctx, x, y, i) {
 ;(function draw() {
   let isSliderInited = false
   let speed = 10
+  let coefficient = 1
   const basePoints = []
 
   function renderUi() {
@@ -23,10 +24,14 @@ function drawPixel(ctx, x, y, i) {
       slider.addEventListener('change', e => {
         speed = Number(e.target.value)
       })
-
       isSliderInited = true
     }
-
+    const coefficientInput = document.querySelector('.coefficient input')
+    coefficientInput.addEventListener('change', e => {
+      stopWorking()
+      coefficient = Number(e.target.value)
+      startWorking()
+    })
     const uiEl = document.querySelector('.ui')
     uiEl.innerHTML = ''
     basePoints.forEach((point, i) => {
@@ -51,9 +56,11 @@ function drawPixel(ctx, x, y, i) {
     ctx.fillRect(point.x, point.y, 1, 1)
     drawPixel(ctx, point.x, point.y, currentI)
   }
-
   function pointBetween(a, b) {
-    return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
+    return {
+      x: (a.x + coefficient * b.x) / (1 + coefficient),
+      y: (a.y + coefficient * b.y) / (1 + coefficient)
+    }
   }
 
   function takeRandomBasePoint() {
@@ -106,7 +113,5 @@ function drawPixel(ctx, x, y, i) {
     id = window.requestAnimationFrame(() => doTriangle(Infinity))
     renderUi()
   }
-
-  console.log('end')
   renderUi(app)
 })()
