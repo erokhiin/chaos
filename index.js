@@ -12,26 +12,39 @@ function drawPixel(ctx, x, y, i) {
 }
 
 ;(function draw() {
-  let isSliderInited = false
   let speed = 10
   let coefficient = 1
-  const basePoints = []
+  const basePoints = [
+    { x: 50, y: 50 },
+    { x: 600, y: 50 },
+    { x: 600, y: 600 },
+    { x: 50, y: 600 },
+  ]
+
+  function setCoeff(coeff) {
+    stopWorking()
+    coefficient = coeff
+    startWorking()
+  }
+
+  function initStaticUi() {
+    let slider = document.querySelector('.speed input')
+    slider.addEventListener('change', e => {
+      speed = Number(e.target.value)
+    })
+    const coefficientInput = document.querySelector('.coefficient input')
+    coefficientInput.addEventListener('change', e =>
+      setCoeff(Number(e.target.value)),
+    )
+    const buttonmin = document.querySelector('.button-min')
+    buttonmin.addEventListener('click', () => setCoeff(coefficient - 1))
+    const buttonpls = document.querySelector('.button-pls')
+    buttonpls.addEventListener('click', () => setCoeff(coefficient + 1))
+  }
+
+  initStaticUi()
 
   function renderUi() {
-    if (!isSliderInited) {
-      let slider = document.querySelector('.speed input')
-
-      slider.addEventListener('change', e => {
-        speed = Number(e.target.value)
-      })
-      isSliderInited = true
-    }
-    const coefficientInput = document.querySelector('.coefficient input')
-    coefficientInput.addEventListener('change', e => {
-      stopWorking()
-      coefficient = Number(e.target.value)
-      startWorking()
-    })
     const uiEl = document.querySelector('.ui')
     uiEl.innerHTML = ''
     basePoints.forEach((point, i) => {
@@ -59,7 +72,7 @@ function drawPixel(ctx, x, y, i) {
   function pointBetween(a, b) {
     return {
       x: (a.x + coefficient * b.x) / (1 + coefficient),
-      y: (a.y + coefficient * b.y) / (1 + coefficient)
+      y: (a.y + coefficient * b.y) / (1 + coefficient),
     }
   }
 
@@ -93,7 +106,10 @@ function drawPixel(ctx, x, y, i) {
 
   canvas.addEventListener('click', e => {
     stopWorking()
-    const basePoint = { x: e.clientX * dpi, y: e.clientY * dpi }
+    const basePoint = {
+      x: Math.round(e.clientX) * dpi,
+      y: Math.round(e.clientY) * dpi,
+    }
     basePoints.push(basePoint)
     startWorking()
   })
@@ -113,5 +129,8 @@ function drawPixel(ctx, x, y, i) {
     id = window.requestAnimationFrame(() => doTriangle(Infinity))
     renderUi()
   }
+
+  startWorking()
   renderUi(app)
+  console.log('started')
 })()
