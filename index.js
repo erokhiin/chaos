@@ -21,19 +21,21 @@ function drawPixel(ctx, x, y, i) {
     { x: 50, y: 600 },
   ]
 
+  const slider = document.querySelector('.speed input')
+  const coefficientInput = document.querySelector('.coefficient input')
+
   function setCoeff(coeff) {
     stopWorking()
     coefficient = coeff
+    coefficientInput.value = coeff
     startWorking()
   }
 
   function initStaticUi() {
-    let slider = document.querySelector('.speed input')
     slider.addEventListener('change', e => {
       speed = Number(e.target.value)
     })
-    const coefficientInput = document.querySelector('.coefficient input')
-    coefficientInput.addEventListener('change', e =>
+    coefficientInput.addEventListener('input', e =>
       setCoeff(Number(e.target.value)),
     )
     const buttonmin = document.querySelector('.button-min')
