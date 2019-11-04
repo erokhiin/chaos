@@ -40,11 +40,6 @@
         right: 20px;
       }
 
-      .coefficient {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-      }
       .point {
         margin-bottom: 10px;
         background-color: rgba(0, 0, 0, 0.25);
@@ -61,6 +56,9 @@
 
       .coefficient {
         display: flex;
+        position: fixed;
+        top: 20px;
+        left: 20px;
       }
 
       .coefficient .button {
@@ -83,6 +81,21 @@
         width: 40px;
         text-align: center;
       }
+
+      .point-select-algorithm {
+        position: fixed;
+        top: 20px;
+        left: 180px;
+      }
+      .point-select-algorithm select {
+        background-color: rgba(0, 0, 0, 0.25);
+        padding: 10px;
+        border-radius: 10px;
+        color: #fff;
+        border: none;
+        font-size: 14px;
+        -webkit-appearance: none;
+      }
     </style>
   </head>
   <body id="app">
@@ -98,6 +111,14 @@
       <input type="number" min="1" max="5000" value="1" />
       <div class="button button-pls">+</div>
     </div>
+
+    <div class="point-select-algorithm">
+      <select name="" id="">
+        <option value="random">Total random</option>
+        <option selected value="neighbor">Random neighbor</option>
+      </select>
+    </div>
+
     <script src="./index.js"></script>
   </body>
 </html>

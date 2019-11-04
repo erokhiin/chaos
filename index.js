@@ -9,20 +9,23 @@ function drawPixel(ctx, x, y, i) {
   ctx.beginPath()
   ctx.arc(x, y, 1, 0, Math.PI * 2, true)
   ctx.fill()
+  // ctx.fillRect(x, y, 1, 1)
 }
 
 ;(function draw() {
   let speed = 10
   let coefficient = 1
   const basePoints = [
-    { x: 50, y: 50 },
-    { x: 600, y: 50 },
-    { x: 600, y: 600 },
-    { x: 50, y: 600 },
+    { x: 100, y: 100 },
+    { x: 550, y: 100 },
+    { x: 550, y: 550 },
+    { x: 100, y: 550 },
   ]
 
   const slider = document.querySelector('.speed input')
   const coefficientInput = document.querySelector('.coefficient input')
+  const algoSelect = document.querySelector('.point-select-algorithm select')
+  let selectedAlgo = algoSelect.value
 
   function setCoeff(coeff) {
     stopWorking()
@@ -42,6 +45,11 @@ function drawPixel(ctx, x, y, i) {
     buttonmin.addEventListener('click', () => setCoeff(coefficient - 1))
     const buttonpls = document.querySelector('.button-pls')
     buttonpls.addEventListener('click', () => setCoeff(coefficient + 1))
+    algoSelect.addEventListener('change', () => {
+      stopWorking()
+      selectedAlgo = algoSelect.value
+      startWorking()
+    })
   }
 
   initStaticUi()
@@ -78,8 +86,31 @@ function drawPixel(ctx, x, y, i) {
     }
   }
 
+  let currBasePoint = 0
+
+  const randomPointAlgos = {
+    random: () => basePoints[getRandomInt(0, basePoints.length - 1)],
+    neighbor: () => {
+      const rnd = getRandomInt(-1, 1)
+      if (rnd === -1) {
+        if (currBasePoint === 0) {
+          currBasePoint = basePoints.length - 1
+        } else {
+          currBasePoint -= 1
+        }
+      } else if (rnd === 1) {
+        if (currBasePoint === basePoints.length - 1) {
+          currBasePoint = 0
+        } else {
+          currBasePoint += 1
+        }
+      }
+      return basePoints[currBasePoint]
+    },
+  }
+
   function takeRandomBasePoint() {
-    return basePoints[getRandomInt(0, basePoints.length - 1)]
+    return randomPointAlgos[selectedAlgo]()
   }
 
   function generateRandomPoint() {
