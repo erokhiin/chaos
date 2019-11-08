@@ -9,7 +9,6 @@ function drawPixel(ctx, x, y, i) {
   ctx.beginPath()
   ctx.arc(x, y, 1, 0, Math.PI * 2, true)
   ctx.fill()
-  // ctx.fillRect(x, y, 1, 1)
 }
 
 ;(function draw() {
@@ -19,7 +18,7 @@ function drawPixel(ctx, x, y, i) {
     { x: 100, y: 100 },
     { x: 550, y: 100 },
     { x: 550, y: 550 },
-    { x: 100, y: 550 },
+    { x: 100, y: 550 }
   ]
 
   const slider = document.querySelector('.speed input')
@@ -27,10 +26,10 @@ function drawPixel(ctx, x, y, i) {
   const algoSelect = document.querySelector('.point-select-algorithm select')
   let selectedAlgo = algoSelect.value
 
-  function setCoeff(coeff) {
+  function setCoefficent(c) {
     stopWorking()
-    coefficient = coeff
-    coefficientInput.value = coeff
+    coefficient = c
+    coefficientInput.value = c
     startWorking()
   }
 
@@ -39,12 +38,12 @@ function drawPixel(ctx, x, y, i) {
       speed = Number(e.target.value)
     })
     coefficientInput.addEventListener('input', e =>
-      setCoeff(Number(e.target.value)),
+      setCoefficent(Number(e.target.value))
     )
     const buttonmin = document.querySelector('.button-min')
-    buttonmin.addEventListener('click', () => setCoeff(coefficient - 1))
+    buttonmin.addEventListener('click', () => setCoefficent(coefficient - 1))
     const buttonpls = document.querySelector('.button-pls')
-    buttonpls.addEventListener('click', () => setCoeff(coefficient + 1))
+    buttonpls.addEventListener('click', () => setCoefficent(coefficient + 1))
     algoSelect.addEventListener('change', () => {
       stopWorking()
       selectedAlgo = algoSelect.value
@@ -82,7 +81,7 @@ function drawPixel(ctx, x, y, i) {
   function pointBetween(a, b) {
     return {
       x: (a.x + coefficient * b.x) / (1 + coefficient),
-      y: (a.y + coefficient * b.y) / (1 + coefficient),
+      y: (a.y + coefficient * b.y) / (1 + coefficient)
     }
   }
 
@@ -106,7 +105,7 @@ function drawPixel(ctx, x, y, i) {
         }
       }
       return basePoints[currBasePoint]
-    },
+    }
   }
 
   function takeRandomBasePoint() {
@@ -123,7 +122,7 @@ function drawPixel(ctx, x, y, i) {
   let id
 
   function doTriangle(end) {
-    if (basePoints.length < 3) return
+    if (basePoints.length < 1) return
     currPoint = pointBetween(currPoint, takeRandomBasePoint())
     render(currPoint)
 
@@ -141,7 +140,7 @@ function drawPixel(ctx, x, y, i) {
     stopWorking()
     const basePoint = {
       x: Math.round(e.clientX) * dpi,
-      y: Math.round(e.clientY) * dpi,
+      y: Math.round(e.clientY) * dpi
     }
     basePoints.push(basePoint)
     startWorking()
