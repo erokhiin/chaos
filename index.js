@@ -105,6 +105,14 @@ function drawPixel(ctx, x, y, i) {
         }
       }
       return basePoints[currBasePoint]
+    },
+    notLast: () => {
+      let newPoint = 0
+      do {
+        newPoint = getRandomInt(0, basePoints.length - 1)
+      } while (newPoint === currBasePoint)
+      currBasePoint = newPoint
+      return basePoints[newPoint]
     }
   }
 
@@ -122,7 +130,7 @@ function drawPixel(ctx, x, y, i) {
   let id
 
   function doTriangle(end) {
-    if (basePoints.length < 1) return
+    if (basePoints.length < 3) return
     currPoint = pointBetween(currPoint, takeRandomBasePoint())
     render(currPoint)
 
