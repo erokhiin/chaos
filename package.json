@@ -2,6 +2,6 @@
   "private": true,
   
   "dependencies": {
-    "node-forge": "^0.9.1"
+    "node-forge": "^1.0.0"
   }
 }
